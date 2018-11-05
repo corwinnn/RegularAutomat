@@ -71,7 +71,7 @@ private:
                 m_graph[newVertexForBegin][firstExpression.first] = '1';
                 m_graph[newVertexForBegin][secondExpression.first] = '1';
                 m_graph[firstExpression.second][newVertexForEnd] = '1';
-                m_graph[firstExpression.second][newVertexForEnd] = '1';
+                m_graph[secondExpression.second][newVertexForEnd] = '1';
                 m_beginVertexOfExpression.push(newVertexForBegin);
                 m_endVertexOfExpression.push(newVertexForEnd);
                 break;

@@ -41,6 +41,19 @@ public:
         std::cout << std::endl;
     }
 
+    int getStartVertice() {
+        return m_beginVertexOfExpression.top();
+    }
+
+    void makeWords(int v, string s ,int len=5) {
+        if (m_terminals.find(v) != m_terminals.end()) {
+            std::cout << s << std::endl;
+        }
+        if (len == 0) return;
+        for (auto i : m_graph[v]) {
+            makeWords(i.first, s + i.second, len - 1);
+        }
+    }
 
 private:
 
@@ -203,5 +216,6 @@ int main() {
     std::string s;
     std::cin >> s;
     RegularAutomaton ra = RegularAutomaton(s);
+    ra.makeWords(ra.getStartVertice(), "");
     return 0;
 }

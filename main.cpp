@@ -3,11 +3,23 @@
 #include <stack>
 #include <map>
 #include <cstdio>
+#include <queue>
 
 using std::vector;
 using std::string;
 
 const int MAX_NEW_VERTICES_BY_SYMBOL = 5;
+
+struct AutomatonVertex {
+    int vertex;
+    int length;
+    int number;
+    AutomatonVertex(int v, int l, int n) :
+            vertex(v),
+            length(l),
+            number(n)
+    {}
+};
 
 class RegularAutomaton {
 
@@ -53,6 +65,29 @@ public:
         for (auto i : m_graph[v]) {
             makeWords(i.first, s + i.second, len - 1);
         }
+    }
+
+    int bfs(char c, int number) const {
+        vector<std::map<int, int>> lengthByNumber(m_vertexNumber + 1);
+        int s  = m_beginVertexOfExpression.top();
+        std::queue<AutomatonVertex> q; //vertex length number
+        q.push(AutomatonVertex(s, 0, 0));
+        while(!q.empty()) {
+            AutomatonVertex v = q.front();
+            q.pop();
+            if (v.number == number && m_terminals.find(v.vertex) != m_terminals.end()) {
+                return v.length;
+            }
+            lengthByNumber[v.vertex][v.number] = v.length;
+            for (auto i : m_graph[v.vertex]) {
+                int delta = (i.second == c) ? 1 : 0;
+                if (lengthByNumber[i.first].find(v.number + delta) == lengthByNumber[i.first].end() &&
+                    v.number + delta <= number) {
+                    q.push(AutomatonVertex(i.first, v.length + 1, v.number + delta));
+                }
+            }
+        }
+        return -1;
     }
 
 private:
@@ -120,6 +155,8 @@ private:
                 m_graph[firstExpression.second][firstExpression.first] = '1';
                 m_graph[firstExpression.second][newVertexForEnd] = '1';
                 m_graph[newVertexForBegin][firstExpression.first] = '1';
+                m_graph[newVertexForBegin][newVertexForEnd] = '1';
+                m_TGraph[newVertexForEnd][newVertexForBegin] = '1';
                 m_TGraph[firstExpression.first][firstExpression.second] = '1';
                 m_TGraph[newVertexForEnd][firstExpression.second] = '1';
                 m_TGraph[firstExpression.first][newVertexForBegin] = '1';
@@ -215,7 +252,15 @@ int main() {
     std::freopen("in.txt", "r", stdin);
     std::string s;
     std::cin >> s;
+    char c;
+    int k;
+    // std::cin >> c >> k;
     RegularAutomaton ra = RegularAutomaton(s);
-    ra.makeWords(ra.getStartVertice(), "");
+    for (int i = 0; i <= 10; i++) {
+        std::cout << 'a' << " " << i << " " << ra.bfs('a', i) << std::endl;
+        std::cout << 'b' << " " << i << " " << ra.bfs('b', i) << std::endl;
+        std::cout << 'c' << " " << i << " " << ra.bfs('c', i) << std::endl;
+    }
+    // std::cout << ra.bfs(c, k);
     return 0;
 }

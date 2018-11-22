@@ -34,15 +34,19 @@ void test() {
 
 }
 
-int main() {
-    // test();
-    std::string s;
-    while (std::cin >> s) {
-        char c;
-        int k;
-        std::cin >> c >> k;
-        RegularAutomaton ra = RegularAutomaton(s);
-        std::cout << ra.bfs(c, k) << std::endl;
+int main(int argc, char* argv[]) {
+    if (static_cast<string>(argv[1]) == "test") {
+        test();
+    }
+    else if (static_cast<string>(argv[1]) == "run") {
+        std::string s;
+        while (std::cin >> s) {
+            char c;
+            int k;
+            std::cin >> c >> k;
+            RegularAutomaton ra = RegularAutomaton(s);
+            std::cout << ra.bfs(c, k) << std::endl;
+        }
     }
     return 0;
 }

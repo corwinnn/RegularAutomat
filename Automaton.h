@@ -132,6 +132,7 @@
                     break;
                 }
 
+                
                 case '+' : {
                     assert(m_expresions.size() >= 2);
                     Expression secondExpression = m_expresions.top();

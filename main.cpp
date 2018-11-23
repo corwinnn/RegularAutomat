@@ -12,6 +12,7 @@ void testEq(int myAns, int ans) {
 }
 
 void test() {
+    std::cout << "=====TEST=====\n";
     string s = "acb..bab.c.*.ab.ba.+.+*a.";
     RegularAutomaton a(s);
     testEq(a.bfs('b', 3), 7);
@@ -30,13 +31,48 @@ void test() {
     testEq(a.bfs('b', 7), 14);
     testEq(a.bfs('c', 5), 10);
     testEq(a.bfs('a', 5), 8);
+    std::cout << "=====END=====\n\n";
+}
 
+void simpleTestForBuilding() {
+    std::cout << "=====TEST=====\n\n";
+    string s = "ab+";
+    RegularAutomaton a(s);
+    testEq(a.bfs('a', 1), 1);
+    testEq(a.bfs('b', 1), 1);
+    testEq(a.bfs('a', 2), -1);
+    testEq(a.bfs('b', 2), -1);
 
+    s = "ab.";
+    a = RegularAutomaton(s);
+    testEq(a.bfs('a', 1), 2);
+    testEq(a.bfs('b', 1), 2);
+    testEq(a.bfs('a', 2), -1);
+    testEq(a.bfs('b', 2), -1);
+
+    s = "a*";
+    a = RegularAutomaton(s);
+    for (int i = 0; i < 5; i++) {
+        testEq(a.bfs('a', i), i);
+    }
+    testEq(a.bfs('b', 1), -1);
+    testEq(a.bfs('c', 1), -1);
+
+    s = "a****************";
+    a = RegularAutomaton(s);
+    testEq(a.getNumberOfVerticesFrom(), 2);
+
+    s = "aa+a+";
+    a = RegularAutomaton(s);
+    testEq(a.getNumberOfVerticesFrom(), 1);
+
+    std::cout << "=====END=====\n\n";
 }
 
 int main(int argc, char* argv[]) {
     if (static_cast<string>(argv[1]) == "test") {
         test();
+        simpleTestForBuilding();
     }
     else if (static_cast<string>(argv[1]) == "run") {
         std::string s;

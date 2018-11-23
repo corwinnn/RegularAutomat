@@ -45,8 +45,8 @@
             assert(m_expresions.size() == 1);
             m_terminals[m_expresions.top().end] = 1;
             getRidOfEpsilon();
-            // showTerminals();
-            // showEdges();
+            showTerminals();
+            showEdges();
         }
 
         void showEdges() const {
@@ -56,6 +56,16 @@
                 }
             }
             std::cout << std::endl;
+        }
+
+        int getNumberOfVerticesFrom() const {
+            int k = 0;
+            for (int i = 0; i <= m_vertexNumber; i++) {
+                if (!m_graph[i].empty()) {
+                    k++;
+                }
+            }
+            return k;
         }
 
         void showTerminals() {
